@@ -35,7 +35,14 @@ class BaseModel:
         self.id = str(uuid.uuid4())
         self.created_at = datetime.datetime.now()
         self.updated_at  = datetime.datetime.now()
-        self.__str__ = f"[__name__] (self.id) self.__dict__"
+
+    def __str__(self):
+        """
+        Defines how the BaseModel object should be printed.
+        [<class name>] (<self.id>) <self.__dict__>
+        """
+        return "[{}] ({}) {}".format(type(self).__name__, self.id,
+                                     self.__dict__)
 
     def save(self):
         """ updates the public instance attribute updated_at with the current datetime"""
