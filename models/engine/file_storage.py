@@ -16,4 +16,21 @@ class FileStorage:
     serializes instances to a JSON file and
     deserializes JSON file to instances
     """
-    pass
+    def save(self):
+        """
+        Serialize __objects to the JSON file
+        """
+        with open(self.__file_path, mode="w") as f:
+            dict_storage = {}
+            for k, v in self.__objects.items():
+                dict_storage[k] = v.to_dict()
+            json.dump(dict_storage, f)
+
+    def reload(self):
+        """
+        Deserializes the JSON file to __objects if it exist.
+        """                                                                   try:
+            with open(self.__file_path, 'r') as f:                                    json_object = json.load(f)
+            for key in json_object:                                                            self.__objects[key] = classes[json_object[key]["__class__"]](**json_object[key])
+        except:
+            pass
