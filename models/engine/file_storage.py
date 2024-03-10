@@ -4,12 +4,15 @@ This module contains the FileStorage model.
 """
 import json
 
-from models.base_model import BaseModel                               from models.user import User
+from models.base_model import BaseModel
+from models.user import User
 from models.state import State
 from models.amenity import Amenity
-from models.city import City                                          from models.place import Place                                        from models.review import Review
-                                                                      classes = {"Amenity": Amenity, "BaseModel": BaseModel, "City": City,             "Place": Place, "Review": Review, "State": State, "User": U
-ser}
+from models.city import City
+from models.place import Place
+from models.review import Review
+
+classes = {"Amenity": Amenity, "BaseModel": BaseModel, "City": City, "Place": Place, "Review": Review, "State": State, "User": User}
 
 class FileStorage:
     """
@@ -21,14 +24,16 @@ class FileStorage:
     __objects = {}
 
     def all(self):
-        """                                                                   Returns the dictionary __objects
+        """
+        Returns the dictionary __objects
         """
         return self.__objects
-                                                                          def new(self, obj):
+    
+    def new(self, obj):
         """
         sets in __objects the `obj` with key <obj class name>.id
-        """                                                                   self.__objects["{}.{}".format(obj.__class__.__name__, obj.id)]
- = obj
+        """
+        self.__objects["{}.{}".format(obj.__class__.__name__, obj.id)] = obj
 
     def save(self):
         """
@@ -43,8 +48,11 @@ class FileStorage:
     def reload(self):
         """
         Deserializes the JSON file to __objects if it exist.
-        """                                                                   try:
-            with open(self.__file_path, 'r') as f:                                    json_object = json.load(f)
-            for key in json_object:                                                            self.__objects[key] = classes[json_object[key]["__class__"]](**json_object[key])
+        """
+        try:
+            with open(self.__file_path, 'r') as f:
+                json_object = json.load(f)
+            for key in json_object:
+                self.__objects[key] = classes[json_object[key]["__class__"]](**json_object[key])
         except:
             pass
